@@ -61,35 +61,36 @@ const summarizeEmail = async () => {
 const OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY';
 
 document.getElementById('filterEmails').addEventListener('click', filterEmails);
-document.getElementById('detectSpam').addEventListener('click', detectSpam);
-document.getElementById('scheduleEmail').addEventListener('click', scheduleEmail);
-document.getElementById('summarizeEmail').addEventListener('click', summarizeEmail);
+  document.getElementById('detectSpam').addEventListener('click', detectSpam);
+  document.getElementById('scheduleEmail').addEventListener('click', scheduleEmail);
+  document.getElementById('summarizeEmail').addEventListener('click', summarizeEmail);
+
 
 const console = document.getElementById('console');
-
-console.addEventListener('click', () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    console.log(tabs[0].url);
-    console.innerHTML = tabs[0].url;
+  
+  console.addEventListener('click', () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      console.log(tabs[0].url);
+      console.innerHTML = tabs[0].url;
+    });
   });
-});
-
-document.getElementById('filterEmails').addEventListener('click', () => {
-  chrome.tabs.create({ url: 'filter-emails.html' });
-});
-
-document.getElementById('detectSpam').addEventListener('click', () => {
-  chrome.tabs.create({ url: 'detect-spam.html' });
-});
-
-document.getElementById('scheduleEmail').addEventListener('click', () => {
-  chrome.tabs.create({ url: 'schedule-email.html' });
-});
-
-document.getElementById('summarizeEmail').addEventListener('click', () => {
-  chrome.tabs.create({ url: 'summarize-email.html' });
-});
-
-chrome.browserAction.onClicked.addListener((tab) => {
-  chrome.tabs.create({ url: 'popup.html' });
-});
+  
+  document.getElementById('filterEmails').addEventListener('click', () => {
+    chrome.tabs.create({ url: 'filter-emails.html' });
+  });
+  
+  document.getElementById('detectSpam').addEventListener('click', () => {
+    chrome.tabs.create({ url: 'detect-spam.html' });
+  });
+  
+  document.getElementById('scheduleEmail').addEventListener('click', () => {
+    chrome.tabs.create({ url: 'schedule-email.html' });
+  });
+  
+  document.getElementById('summarizeEmail').addEventListener('click', () => {
+    chrome.tabs.create({ url: 'summarize-email.html' });
+  });
+  
+  chrome.browserAction.onClicked.addListener((tab) => {
+    chrome.tabs.create({ url: 'popup.html' });
+  });
