@@ -4,16 +4,16 @@ const gmail = require('gmail-api');
 const schedule = require('node-schedule');
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'hotmail',
   auth: {
-    user: 'your-email@gmail.com',
-    pass: 'your-password'
+    user: 'dengkthatsme@hotmail.com',
+    pass: 'rANU0909!'
   }
 });
 
 const mailOptions = {
-  from: 'sender-email@gmail.com',
-  to: 'receiver-email@gmail.com',
+  from: 'sender-email@hotmail.com',
+  to: 'receiver-email@hotmail.com',
   subject: 'Scheduled Email',
   text: 'This is a scheduled email sent using Node.js and nodemailer.'
 };
