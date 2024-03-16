@@ -58,7 +58,7 @@ const summarizeEmail = async () => {
   }
 };
 
-const OPENAI_API_KEY = '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';
+const OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY';
 
 document.getElementById('filterEmails').addEventListener('click', filterEmails);
 document.getElementById('detectSpam').addEventListener('click', detectSpam);
