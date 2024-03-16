@@ -1,107 +1,91 @@
-// Send a message to the background script to filter emails
-function filterEmails() {
-  const filters = [
-    { type: "subject", value: "important" },
-    { type: "sender", value: "example@example.com" },
-    { type: "date", value: "yesterday" },
-  ];
-  chrome.runtime.sendMessage({ type: "filter-emails", filters });
-}
-
-// Send a message to the background script to mark an email as read or unread
-function markEmail(email, isRead) {
-  chrome.runtime.sendMessage({
-    type: "mark-email",
-    emailId: email.id,
-    isRead,
+// content.js
+const filterEmails = async () => {
+  const emails = Array.from(document.querySelectorAll('.y6>div'));
+  const filteredEmails = emails.filter(email => {
+    const subject = email.querySelector('.z0>.vU>.aB>span');
+    return subject && subject.textContent.includes('AI');
   });
-}
+  console.log('Filtered emails:', filteredEmails);
+};
 
-// Send a message to the background script to mark an email as spam
-function markEmailAsSpam(email) {
-  chrome.runtime.sendMessage({
-    type: "mark-email-as-spam",
-    emailId: email.id,
+const detectSpam = async () => {
+  const emails = Array.from(document.querySelectorAll('.y6>div'));
+  const spamEmails = emails.filter(email => {
+    const subject = email.querySelector('.z0>.vU>.aB>span');
+    return subject && subject.textContent.includes('spam');
   });
-}
+  console.log('Spam emails:', spamEmails);
+};
 
-// Send a message to the background script to move an email to a specific folder
-function moveEmailToFolder(email, folder) {
-  chrome.runtime.sendMessage({
-    type: "move-email-to-folder",
-    emailId: email.id,
-    folder,
+const scheduleEmail = async () => {
+  const email = document.querySelector('.y6>div');
+  const subject = email.querySelector('.z0>.vU>.aB>span');
+  if (subject && subject.textContent.includes('schedule')) {
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+    const formattedDate = date.toISOString().slice(0, 10);
+    const input = document.createElement('input');
+    input.type = 'date';
+    input.value = formattedDate;
+    email.querySelector('.aK1').appendChild(input);
+    console.log('Email scheduled for:', formattedDate);
+}
+};
+
+const summarizeEmail = async () => {
+  const email = document.querySelector('.y6>div');
+  const subject = email.querySelector('.z0>.vU>.aB>span');
+  if (subject && subject.textContent.includes('summarize')) {
+    const text = email.querySelector('.iI>.aB>span');
+    const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        prompt: `Summarize the following email:\n\n${text.textContent}`,
+        max_tokens: 60,
+        n: 1,
+        stop: null,
+        temperature: 0.5,
+      }),
+    });
+    const data = await response.json();
+    const summary = data.choices[0].text;
+    email.querySelector('.aK1').innerHTML += `<div class="ar9">Summary: ${summary}</div>`;
+    console.log('Email summary:', summary);
+  }
+};
+
+const OPENAI_API_KEY = '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';
+
+document.getElementById('filterEmails').addEventListener('click', filterEmails);
+document.getElementById('detectSpam').addEventListener('click', detectSpam);
+document.getElementById('scheduleEmail').addEventListener('click', scheduleEmail);
+document.getElementById('summarizeEmail').addEventListener('click', summarizeEmail);
+
+const console = document.getElementById('console');
+
+console.addEventListener('click', () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    console.log(tabs[0].url);
+    console.innerHTML = tabs[0].url;
   });
-}
-
-// Send a message to the background script to schedule an email
-function scheduleEmail(emailData, time) {
-  chrome.runtime.sendMessage({
-    type: "schedule-email",
-    emailData,
-    time,
-  });
-}
-
-// Send a message to the background script to summarize the emails
-function summarizeEmails() {
-  chrome.runtime.sendMessage({ type: "summarize-emails" });
-}
-
-// Add click event listeners to the filter, mark, categorize, schedule, and summarize buttons
-const filterButton = document.querySelector("#filter-button");
-filterButton.addEventListener("click", filterEmails);
-
-const markReadButton = document.querySelector("#mark-read-button");
-markReadButton.addEventListener("click", () => {
-  const email = document.querySelector("#selected-email");
-  if (email) {
-    markEmail(email, true);
-  }
 });
 
-const markUnreadButton = document.querySelector("#mark-unread-button");
-markUnreadButton.addEventListener("click", () => {
-  const email = document.querySelector("#selected-email");
-  if (email) {
-    markEmail(email, false);
-  }
+document.getElementById('filterEmails').addEventListener('click', () => {
+  chrome.tabs.create({ url: 'filter-emails.html' });
 });
 
-const markSpamButton = document.querySelector("#mark-spam-button");
-markSpamButton.addEventListener("click", () => {
-  const email = document.querySelector("#selected-email");
-  if (email) {
-    markEmailAsSpam(email);
-  }
+document.getElementById('detectSpam').addEventListener('click', () => {
+  chrome.tabs.create({ url: 'detect-spam.html' });
 });
 
-const moveToInboxButton = document.querySelector("#move-to-inbox-button");
-moveToInboxButton.addEventListener("click", () => {
-  const email = document.querySelector("#selected-email");
-  if (email) {
-    moveEmailToFolder(email, "INBOX");
-  }
+document.getElementById('scheduleEmail').addEventListener('click', () => {
+  chrome.tabs.create({ url: 'schedule-email.html' });
 });
 
-const moveToSpamButton = document.querySelector("#move-to-spam-button");
-moveToSpamButton.addEventListener("click", () => {
-  const email = document.querySelector("#selected-email");
-  if (email) {
-    moveEmailToFolder(email, "SPAM");
-  }
+document.getElementById('summarizeEmail').addEventListener('click', () => {
+  chrome.tabs.create({ url: 'summarize-email.html' });
 });
-
-const scheduleButton = document.querySelector("#schedule-button");
-scheduleButton.addEventListener("click", () => {
-  const emailData = {
-    to: document.querySelector("#to").value,
-    subject: document.querySelector("#subject").value,
-    body: document.querySelector("#body").value,
-  };
-  const time = document.querySelector("#time").value;
-  scheduleEmail(emailData, time);
-});
-
-const summarizeButton = document.querySelector("#summarize-button");
-summarizeButton.addEventListener("click", summarizeEmails);

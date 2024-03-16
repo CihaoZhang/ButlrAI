@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "Email AI Assistant",
+  "name": "Botlr",
   "version": "1.0",
   "description": "An AI assistant for Gmail that can filter, summarize, and schedule emails.",
   "icons": {
@@ -19,9 +19,8 @@
   "permissions": [
     "activeTab",
     "storage",
-    "https://mail.google.com/*",
-    "https://api.openai.com/*",
-    "alarms"
+    "tabs",
+    "https://openai.com/*"
   ],
   "browser_action": {
     "default_icon": "icons/imresizer-1710577736535.png",
