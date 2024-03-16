@@ -6,10 +6,6 @@
   "icons": {
     "48": "icons/imresizer-1710577736535.png"
   },
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
@@ -22,9 +18,13 @@
     "tabs",
     "https://openai.com/*"
   ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "browser_action": {
     "default_icon": "icons/imresizer-1710577736535.png",
-    "default_title": "Email AI Assistant",
+    "default_title": "Botlr",
     "default_popup": "index.html"
   }
 }

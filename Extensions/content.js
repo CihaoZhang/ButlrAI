@@ -89,3 +89,7 @@ document.getElementById('scheduleEmail').addEventListener('click', () => {
 document.getElementById('summarizeEmail').addEventListener('click', () => {
   chrome.tabs.create({ url: 'summarize-email.html' });
 });
+
+chrome.browserAction.onClicked.addListener((tab) => {
+  chrome.tabs.create({ url: 'popup.html' });
+});

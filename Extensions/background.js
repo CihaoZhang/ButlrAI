@@ -10,7 +10,3 @@ chrome.browserAction.onClicked.addListener(async () => {
     alert('Please open a Gmail tab to use this extension.');
   }
 });
-
-chrome.browserAction.onClicked.addListener((tab) => {
-  chrome.tabs.create({ url: 'popup.html' });
-});
