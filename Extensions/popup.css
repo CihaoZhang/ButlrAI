@@ -2,7 +2,47 @@
 body {
     font-family: Arial, sans-serif;
   }
-  button {
+
+  #title{
+    text-align: center;
+    font-family: monospace;
+    font-size: 2rem;
+    margin-top: 0.3rem;
+    margin-left: 0.1rem;
+    color: white;
+
+  }
+  #btn-holder{
+    border-radius: .4rem;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
+    font-style: bold;
+    background-color: #383e59;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .btn-main {
     margin: 10px;
     border-radius: 3px solid;
+    width: 11rem;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    margin-right: 0.2rem;
+    margin-left: 0.2rem;
+    
+  }
+  .background{
+    background-color: #2e334a;
+    width: 12rem;
+  }
+
+  #container{
+    border-radius: 0.5rem;
+    border-color: white;
+    border-width: 0.5rem;
+  }
+
+  #bottom{
+    margin-top:0.2rem;
   }
