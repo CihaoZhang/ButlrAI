@@ -91,6 +91,12 @@ async function listLabels(auth) {
             const subjectHeader = headers.find(header => header.name === 'Subject');
             const subject = subjectHeader ? subjectHeader.value : "NO SUBJECT";
             console.log("Subject: " + subject)
+
+
+            const parts = message.payload.parts;
+            const body = parts[0].body.data;
+            const decodedBody = Buffer.from(body, 'base64').toString();
+            console.log(decodedBody)
         }
     }
     
