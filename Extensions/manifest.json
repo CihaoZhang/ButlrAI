@@ -4,7 +4,7 @@
   "version": "1.0",
   "description": "An AI assistant for Gmail that can filter, summarize, and schedule emails.",
   "icons": {
-    "48": "imresizer-1710577736535.png"
+    "48": "icons/imresizer-1710577736535.png"
   },
   "background": {
     "scripts": ["background.js"],
@@ -24,8 +24,8 @@
     "alarms"
   ],
   "browser_action": {
-    "default_icon": "imresizer-1710577736535.png",
+    "default_icon": "icons/imresizer-1710577736535.png",
     "default_title": "Email AI Assistant",
-    "default_popup": "popup.html"
+    "default_popup": "index.html"
   }
 }

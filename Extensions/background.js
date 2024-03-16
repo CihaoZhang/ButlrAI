@@ -15,10 +15,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (
         filters.some(
           (filter) =>
-            filter.type === "subject" &&subject.toLowerCase().includes(filter.value.toLowerCase())
+            filter.type === "subject" &&
+            subject.toLowerCase().includes(filter.value.toLowerCase())
         ) ||
         filters.some(
-          (filter) =>
+         (filter) =>
             filter.type === "sender" &&
             sender.toLowerCase().includes(filter.value.toLowerCase())
         ) ||
@@ -40,69 +41,110 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     filteredEmails.forEach((email) => {
       filteredEmailsContainer.appendChild(email);
     });
-  } else if (request.type === "summarize-emails") {
-    // Get the user's emails
-    const emails = document.querySelectorAll(".yW > .y6");
+  } else if (request.type === "mark-email") {
+    // Get the current tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      // Execute JavaScript code to mark the email as read or unread
+      chrome.tabs.executeScript(tabs[0].id, {
+        code: `
+          // Get the current email element
+          const email = document.querySelector('.yW .yX .yW > .y6');
 
-    // Initialize an empty array to store the summaries
-    const summaries = [];
-
-    // Loop through each email and summarize it using the OpenAI API
-    emails.forEach((email) => {
-      // Extract the email text
-      const text = email.innerText;
-
-      // Call the OpenAI API to summarize the email
-      fetch("https://api.openai.com/v1/engines/davinci/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer YOUR_OPENAI_API_KEY",
-        },
-        body: JSON.stringify({
-          prompt: `Summarize this email:\n\n${text}`,
-          max_tokens: 60,
-          temperature: 0.5,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // Add the summary to the array
-          summaries.push(data.choices[0].text);
-
-          // Check if all the emails have been summarized
-          if (summaries.length === emails.length) {
-            // Send the summaries back to the content script
-            sendResponse({ summaries });
+          // Check if the email is marked as read or unread
+          if (email.classList.contains('zA')) {
+            // Mark the email as unread
+            email.classList.remove('zA');
+          } else {
+            // Mark the email as read
+            email.classList.add('zA');
           }
-        });
+        `,
+      });
+    });
+  } else if (request.type === "mark-email-as-spam") {
+    // Get the current tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      // Execute JavaScript code to mark the email as spam
+      chrome.tabs.executeScript(tabs[0].id, {
+        code: `
+          // Get the current email element
+          const email = document.querySelector('.yW .yX .yW > .y6');
+
+          // Mark the email as spam
+          email.reportSpam();
+        `,
+      });
+    });
+ } else if (request.type === "move-email-to-folder") {
+    // Get the current tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      // Execute JavaScript code to move the email to a specific folder
+      chrome.tabs.executeScript(tabs[0].id, {
+        code: `
+          // Get the current email element
+          const email = document.querySelector('.yW .yX .yW > .y6');
+
+          // Move the email to a specific folder
+          email.moveTo('[Gmail]/${request.folder}');
+        `,
+      });
     });
   } else if (request.type === "schedule-email") {
     // Schedule the email to be sent at the specified time
-    chrome.alarms.create(request.id, {
-      when: request.time,
-    });
+    const emailData = request.emailData;
+    const time = request.time;
 
     // Save the email data to send later
     chrome.storage.local.set({
-      [request.id]: {
-        to: request.to,
-        subject: request.subject,
-        body: request.body,
-      },
+      [time]: emailData,
+    });
+  } else if (request.type === "summarize-emails") {
+    // Get the current tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      // Execute JavaScript code to summarize the emails
+      chrome.tabs.executeScript(tabs[0].id, {
+        code: `
+          // Get all the email elements\\
+          const emails = document.querySelectorAll('.yW > .y6');
+
+          // Initialize an empty array to store the summaries
+          const summaries = [];
+
+          // Loop through each email and summarize it using the OpenAI API
+          emails.forEach((email) => {
+            // Extract the email text
+            const text = email.innerText;
+
+            // Call the OpenAI API to summarize the email
+            fetch('https://api.openai.com/v1/engines/davinci/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_OPENAI_API_KEY',
+              },
+              body: JSON.stringify({
+                prompt:\`Summarize this email:\n\n\${text}\`,
+                max_tokens: 60,
+                temperature: 0.5,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // Add the summary to the array
+                summaries.push(data.choices[0].text);
+
+                // Check if all the emails have been summarized
+                if (summaries.length === emails.length) {
+                  // Send the summaries back to the content script
+                  chrome.runtime.sendMessage({
+                    type: 'summaries-ready',
+                    summaries,
+                  });
+                }
+              });
+          });
+        `,
+      });
     });
   }
-});
-
-// Listen for alarms
-chrome.alarms.onAlarm.addListener((alarm) => {
-  // Get the email data from storage
-  chrome.storage.local.get(alarm.name, (data) => {
-    // Send the email using the Gmail API
-    const emailData = data[alarm.name];
-    sendEmail(emailData.to, emailData.subject, emailData.body);
-
-    // Delete the email data from storage
-    chrome.storage.local.remove(alarm.name);
-  });
 });
