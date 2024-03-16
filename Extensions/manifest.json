@@ -3,9 +3,6 @@
     "name": "Email AI Assistant",
     "version": "1.0",
     "description": "An AI assistant for Gmail that can filter, mark, and categorize emails.",
-    "icons": {
-      "48": "icon.png"
-    },
     "background": {
       "scripts": ["background.js"],
       "persistent": false
