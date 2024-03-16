@@ -9,42 +9,41 @@ body {
     font-size: 2rem;
     margin-top: 0.3rem;
     margin-left: 0.1rem;
-    color: white;
+    color: whitesmoke;
   }
+
   #btn-holder{
-    width: 11rem;
+    width: 19rem;
+    height: 18rem;
     border-radius: 0.4rem;
     border-color: white;
     border-width: 0.2rem;
-    margin-left: 0.3rem;
-    margin-right: 0.3rem;
-    font-style: bold;
     background-color: #3c4362;
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
-    align-self: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-left: 0.5rem;
   }
 
   .btn-main {
+    height:3.5rem;
     margin: 10px;
     border-radius: 3px solid;
-    width: 10.5rem;
-    margin-top: 0.15rem;
-    margin-bottom: 0.15rem;
-    margin-right: 0.1rem;
-    margin-left: 0.1rem;
+    width: 18rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
   }
   .background{
-    background-color: #2e334a;
-    width: 12rem;
+    background-color: #2e344f;
+    width: 20rem;
+    height: 25rem;
   }
 
   #container{
-    border-radius: 0.5rem;
-    border-color: white;
-    border-width: 0.5rem;
+    align-items: center;
   }
 
   #bottom{
-    margin-top:0.2rem;
+    position:absolute;
+    bottom: 0.5rem;
+    margin-left: 1.3rem;
   }
