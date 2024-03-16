@@ -1,21 +1,31 @@
 {
-    "manifest_version": 2,
-    "name": "Email AI Assistant",
-    "version": "1.0",
-    "description": "An AI assistant for Gmail that can filter, mark, and categorize emails.",
-    "background": {
-      "scripts": ["background.js"],
-      "persistent": false
-    },
-    "content_scripts": [
-      {
-        "matches": ["https://mail.google.com/*"],
-        "js": ["content.js"]
-      }
-    ],
-    "permissions": [
-      "activeTab",
-      "storage",
-      "https://mail.google.com/*"
-    ]
+  "manifest_version": 2,
+  "name": "Email AI Assistant",
+  "version": "1.0",
+  "description": "An AI assistant for Gmail that can filter, summarize, and schedule emails.",
+  "icons": {
+    "48": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "storage",
+    "https://mail.google.com/*",
+    "https://api.openai.com/*",
+    "alarms"
+  ],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "Email AI Assistant",
+    "default_popup": "popup.html"
   }
+}
