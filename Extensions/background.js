@@ -106,8 +106,3 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     chrome.storage.local.remove(alarm.name);
   });
 });
-
-// Function to send an email using the Gmail API
-function sendEmail(to, subject, body) {
-  // TODO: Implement this function using the Gmail API
-}
