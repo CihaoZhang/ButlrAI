@@ -97,3 +97,60 @@ button:hover span{
 button:hover {
     border: none;
 }
+
+#top{
+    height:10vh;
+    width:100vw;
+}
+
+#middle{
+    display: flex;
+}
+
+#middle-left{
+  width:18vw;
+  height:90vh;
+  background-color: rgb(60, 71, 104);
+}
+
+
+#middle-right{
+  width:82vw;
+  height:90vh;
+  background-color: rgb(52, 60, 100);
+}
+
+.folder{
+    color:white;
+    margin-top:0.3rem;
+    margin-bottom:0.3rem;
+    margin-left:1rem;
+}
+
+#btn-add-folder{
+    margin-top:3rem;
+    font-size:1.5rem;
+}
+
+#email-grid{
+  margin-left:0rem;
+}
+
+.mail-btn-action-container{
+    display:flex;
+
+}
+
+.mail-btn-action{
+  margin:0.4rem;
+}
+
+.email-card{
+    margin:0.5rem;
+    background:rgb(71, 85, 133);
+}
+
+.card-body{
+    background-color: rgb(89, 90, 110);
+    border-width:black;
+}

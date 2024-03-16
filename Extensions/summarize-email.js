@@ -72,33 +72,29 @@ async function authorize() {
  */
 async function listLabels(auth) {
   const gmail = google.gmail({version: 'v1', auth});
-   var request = await gmail.users.messages.list({
+    const messages = await gmail.users.messages.list({
         userId: 'me',
-   })
+        labelIds: 'INBOX',
+        maxResults: 10,
+    })
+    console.log(messages.data.messages[0].id)
+
+    for (let i = 0; i < 10; i++) {
+        const response = await gmail.users.messages.get({
+            userId: 'me',
+            id: messages.data.messages[i].id
+        })
+        
+        const message = response.data;
+        if (message) {
+            const headers = message.payload.headers;
+            const subjectHeader = headers.find(header => header.name === 'Subject');
+            const subject = subjectHeader ? subjectHeader.value : "NO SUBJECT";
+            console.log("Subject: " + subject)
+        }
+    }
     
-   const messages = request.data.messages;
-   console.log(messages);
-  
 
-   for (let i = 0; i < messages.length; i++) {
-    const response = gmail.users.messages.get({
-        userId: "me",
-        id: messages[0].id,
-       }) 
-    const message = response.data;
-    // if (message) {
-    //     const headers = message.payload.headers;
-    //     const subjectHeader = headers.find(header => header.name === "Subject")
-    //     const subject = subjectHeader ? subjectHeader.value : 'No subject';
-    //     const parts = message.payload.parts;
-    //     const body = parts[0].body.data;
-    //     const decodedBody = Buffer.from(body, "base64").toString();
-    //     console.log(subject);
-    //     console.log("Message body: " + decodedBody);
-    // }
-
-   }    
 }
-
 
 authorize().then(listLabels).catch(console.error);
